@@ -431,8 +431,6 @@ footer p {
   text-align: center;
 }
 
-
-
 /* Ensure all project cards have the same height */
 #projects .details-container {
   display: flex;
@@ -451,4 +449,10 @@ footer p {
   margin-top: auto;
   display: flex;
   justify-content: center;
+}
+
+#projects {
+  padding-top: 350px; /* Adjust this value as needed */
+  min-height: 100vh;
+
 }
