@@ -454,5 +454,7 @@ footer p {
 #projects {
   padding-top: 350px; /* Adjust this value as needed */
   min-height: 100vh;
-
+}
+#contact {
+  padding-top: 200px;
 }
