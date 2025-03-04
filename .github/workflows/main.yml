@@ -3,7 +3,7 @@ name: Deploy to EC2 with Nginx
 on:
   push:
     branches:
-      - main  # Runs on push to the 'main' branch
+      - main
   workflow_dispatch:
 
 jobs:
@@ -26,9 +26,18 @@ jobs:
           # Update system and install required packages
           sudo apt update && sudo apt install -y nginx git
 
-          # Clone the repository
-          sudo rm -rf /var/www/html/*
-          sudo git clone https://github.com/jasonsanjay21/DevOpsPF.git /var/www/html
+          # Ensure the directory exists
+          sudo mkdir -p /var/www/html
+          
+          # If repo already exists, pull latest changes; otherwise, clone it
+          if [ -d "/var/www/html/.git" ]; then
+              cd /var/www/html
+              sudo git reset --hard
+              sudo git pull origin main
+          else
+              sudo rm -rf /var/www/html/*
+              sudo git clone https://github.com/jasonsanjay21/DevOpsPF.git /var/www/html
+          fi
 
           # Set proper permissions
           sudo chown -R www-data:www-data /var/www/html
