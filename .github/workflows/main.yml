@@ -22,13 +22,34 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          # Update and install Nginx
+          
+          # Update system and install required packages
           sudo apt update && sudo apt install -y nginx git
 
           # Clone the repository
           sudo rm -rf /var/www/html/*
           sudo git clone https://github.com/jasonsanjay21/DevOpsPF.git /var/www/html
 
+          # Set proper permissions
+          sudo chown -R www-data:www-data /var/www/html
+          sudo chmod -R 755 /var/www/html
+
+          # Update Nginx configuration
+          sudo tee /etc/nginx/sites-available/default > /dev/null <<EOL
+          server {
+              listen 80;
+              server_name _;
+
+              root /var/www/html;
+              index index.html index.htm index.nginx-debian.html;
+
+              location / {
+                  try_files \$uri \$uri/ =404;
+              }
+          }
+          EOL
+
           # Restart Nginx
           sudo systemctl restart nginx
+
           EOF
