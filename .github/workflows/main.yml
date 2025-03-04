@@ -1,7 +1,10 @@
 name: Deploy to EC2 with Nginx
 
 on:
-  workflow_dispatch:  # Allows manual trigger
+  push:
+    branches:
+      - main  # Runs on push to the 'main' branch
+  workflow_dispatch:
 
 jobs:
   deploy:
